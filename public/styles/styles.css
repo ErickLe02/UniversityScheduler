@@ -1,18 +1,33 @@
 .drop-zone {
-    min-height: 50px;
+    height: 60px; /* Adjust as needed */
+    padding: 5px;
     background-color: #f8f9fa;
     border: 1px solid #6c757d;
+    transition: background-color 0.3s ease;
 }
 
 .draggable {
     padding: 5px;
     background-color: #007bff;
-    color: #fff;
-    cursor: move; /* Use 'grab' for a grabbing hand icon */
-    margin-bottom: 4px; /* Space between draggable items */
+    color: white;
+    cursor: grab;
+    margin-bottom: 4px;
+    display: inline-block; /* Only take up the space it needs */
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
 
-/* Highlight drop zone on drag over */
+  /* Highlight drop zone on drag over */
 .highlight {
     background-color: #9fcdff;
+}
+
+.class-info {
+    display: block; /* Take the full width of the cell */
+    background-color: #007bff;
+    color: white;
+    margin: 0; /* Remove margin to fit into the cell */
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }
