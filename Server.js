@@ -4,6 +4,7 @@ const express = require('express');
 const app = express();
 const db = require('./dbConnection.js'); // Import your database connection
 const path = require('path');
+const mysql = require('mysql2/promise');
 
 app.use(express.static(path.join(__dirname, 'public')));
 
@@ -14,10 +15,30 @@ app.get('/', (req, res) => {
 
 app.get('/getData', async (req, res) => {
     try {
-        const data = await db.query('SELECT * FROM class_list'); // Example query
-        res.json(data.rows);
-        
+        // Create a connection pool
+        const pool = mysql.createPool({
+            host: 'localhost',
+            user: 'root',
+            password: '',
+            database: 'isp_prj',
+            waitForConnections: true,
+            connectionLimit: 10,
+            queueLimit: 0
+        });
+
+        // Get a connection from the pool
+        const connection = await pool.getConnection();
+
+        // Query the database
+        const [rows] = await connection.query('SELECT * FROM class_list');
+
+        // Release the connection back to the pool
+        connection.release();
+
+        // Respond with the data
+        res.json(rows);
     } catch (error) {
+        console.error('Error fetching data:', error);
         res.status(500).send('Server error');
     }
 });
