@@ -14,8 +14,9 @@ app.get('/', (req, res) => {
 
 app.get('/getData', async (req, res) => {
     try {
-        const data = await db.query('SELECT * FROM your_table'); // Example query
+        const data = await db.query('SELECT * FROM class_list'); // Example query
         res.json(data.rows);
+        
     } catch (error) {
         res.status(500).send('Server error');
     }
