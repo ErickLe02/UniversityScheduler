@@ -43,3 +43,19 @@ body {
 .day-slot.highlight {
     background-color: #e3e3e3;
 }
+
+#data-container div {
+    margin: 5px;
+    padding: 10px;
+    border: 1px solid #ddd;
+    border-radius: 4px;
+    background-color: #f9f9f9;
+}
+
+#data-container div:hover {
+    background-color: #eaeaea;
+}
+
+#data-container div:active {
+    background-color: #ddd;
+}

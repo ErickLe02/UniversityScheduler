@@ -79,13 +79,39 @@ async function fetchData() {
     const response = await fetch('/getData');
     const data = await response.json();
     const container = document.getElementById('data-container');
-    data.forEach(item => {
+
+    data.forEach((item, index) => {
         // Create elements and append to container
         const element = document.createElement('div');
-        element.textContent = JSON.stringify(item); 
+        element.textContent = JSON.stringify(item);
         container.appendChild(element);
-        element.setAttribute("id", "draggable-event");
+
+        // Set attributes for draggable functionality
+        element.setAttribute("id", "draggable-" + index);
         element.setAttribute("draggable", "true");
+        element.style.cursor = 'move'; // Change cursor on hover
+
+        // Add event listeners for drag events
+        element.addEventListener('dragstart', (event) => {
+            event.dataTransfer.setData('text/plain', event.target.id);
+        });
+    });
+
+    // Add event listeners to the container for dragover and drop events
+    container.addEventListener('dragover', (event) => {
+        event.preventDefault(); // Necessary to allow drop
+    });
+
+    container.addEventListener('drop', (event) => {
+        event.preventDefault();
+        const id = event.dataTransfer.getData('text');
+        const draggableElement = document.getElementById(id);
+        const dropzone = event.target;
+        
+        // Move the draggable element to the dropzone
+        if (dropzone.id !== draggableElement.id) {
+            dropzone.appendChild(draggableElement);
+        }
     });
 }
 
