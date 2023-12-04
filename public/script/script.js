@@ -74,3 +74,19 @@ function drop(e) {
     // Remove highlight from all slots
     highlightDropSlots(false);
 }
+
+async function fetchData() {
+    const response = await fetch('/getData');
+    const data = await response.json();
+    const container = document.getElementById('data-container');
+    data.forEach(item => {
+        // Create elements and append to container
+        const element = document.createElement('div');
+        element.textContent = JSON.stringify(item); 
+        container.appendChild(element);
+        element.setAttribute("id", "draggable-event");
+        element.setAttribute("draggable", "true");
+    });
+}
+
+fetchData();
