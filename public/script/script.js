@@ -79,17 +79,30 @@ async function fetchData() {
     const response = await fetch('/getData');
     const data = await response.json();
     const container = document.getElementById('data-container');
+    
+    // List of keys to ignore
+    const keysToIgnore = ['currentCapacity', 'maxCapacity', 'courseId','courseLocation'];
 
     data.forEach((item, index) => {
-        // Create elements and append to container
+        // Create a div element for each item
         const element = document.createElement('div');
-        element.textContent = JSON.stringify(item);
-        container.appendChild(element);
+
+        // Format and append each property of the item
+        for (const key in item) {
+            if (!keysToIgnore.includes(key)) { // Check if the key is not in the ignore list
+                const p = document.createElement('p'); // Create a paragraph for each property
+                p.textContent = `${key}: ${item[key]}`; // Add text content like "department: CPSC"
+                element.appendChild(p);
+            }
+        }
 
         // Set attributes for draggable functionality
         element.setAttribute("id", "draggable-" + index);
         element.setAttribute("draggable", "true");
         element.style.cursor = 'move'; // Change cursor on hover
+
+        // Add the element to the container
+        container.appendChild(element);
 
         // Add event listeners for drag events
         element.addEventListener('dragstart', (event) => {
@@ -107,12 +120,14 @@ async function fetchData() {
         const id = event.dataTransfer.getData('text');
         const draggableElement = document.getElementById(id);
         const dropzone = event.target;
-        
+
         // Move the draggable element to the dropzone
         if (dropzone.id !== draggableElement.id) {
             dropzone.appendChild(draggableElement);
         }
     });
 }
+
+
 
 fetchData();
