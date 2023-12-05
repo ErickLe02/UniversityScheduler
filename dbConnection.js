@@ -1,6 +1,7 @@
 const mysql = require('mysql2');
 const fs = require('fs');
 const sqlFile = "classList.sql";
+const sqlFile2 = "userClasses.sql";
 
 // Connection to the database
 const connection = mysql.createConnection({
@@ -66,6 +67,22 @@ connection.connect((err) => {
                             });
                         }
                     });
+                    
+                    
+                    // Create table for registered classes
+                    const sqlQueries2 = fs.readFileSync(sqlFile2, 'utf8').split(';');
+                    sqlQueries2.forEach((query) => {
+                        if (query.trim() !== '') {
+                            connection.query(query, (err) => {
+                                if (err) {
+                                    console.error('Error executing query: ', err);
+                                } else {
+                                    console.log('Query executed successfully');
+                                }
+                            });
+                        }
+                    });
+
 
                     // Close the connection after all queries have been executed
                     connection.end();
