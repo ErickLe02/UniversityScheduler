@@ -82,7 +82,7 @@ async function fetchData() {
 }
 
 
-
+// parses the weekDays string to properly display on the schedule
 function parseDays(dayString) {
     const dayMap = {
       'M': 'Monday',

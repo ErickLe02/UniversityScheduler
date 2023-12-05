@@ -35,10 +35,9 @@ app.get('/getData', async (req, res) => {
         // Query the database
         const [rows] = await connection.query('SELECT * FROM class_list');
 
-        // Release the connection back to the pool
         connection.release();
 
-        // Respond with the data
+        // responds with the data that was retrieved
         res.json(rows);
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -65,10 +64,9 @@ app.get('/getMyData', async (req, res) => {
         // Query the database
         const [rows] = await connection.query('SELECT * FROM user_classes');
 
-        // Release the connection back to the pool
         connection.release();
 
-        // Respond with the data
+        // responds with the data that was retrieved
         res.json(rows);
     } catch (error) {
         console.error('Error fetching data:', error);
@@ -78,7 +76,7 @@ app.get('/getMyData', async (req, res) => {
 
 app.use(express.json());
 
-app.post('/copyRow', async (req, res) => {
+app.post('/copyRow', async (req, res) => {  // used copy values from class_list to user_classes
     try {
         const { id } = req.body;
 
@@ -108,7 +106,7 @@ app.post('/copyRow', async (req, res) => {
 });
 
 
-app.post('/deleteRow', async (req, res) => {
+app.post('/deleteRow', async (req, res) => {  // used to delete a row from user_classes
     try {
         const { id } = req.body;
 
@@ -139,7 +137,7 @@ app.post('/deleteRow', async (req, res) => {
 });
 
 
-const PORT = process.env.PORT || 3000;
+const PORT = process.env.PORT || 8080;  // listens to port 8080
 app.listen(PORT, () => {
     console.log(`Server running on port ${PORT}`);
 });

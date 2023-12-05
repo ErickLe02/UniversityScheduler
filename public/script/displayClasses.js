@@ -1,4 +1,4 @@
-async function displayClasses() {
+async function displayClasses() {  // retrieves class_list data and displays it on the html page
     try {
         const response = await fetch('/getData');
         const data = await response.json();
@@ -21,11 +21,11 @@ async function displayClasses() {
     }
 }
 
-document.addEventListener('DOMContentLoaded', function() {
+document.addEventListener('DOMContentLoaded', function() {  // once web page loads the function is called
     displayClasses();
 });
 
-async function addClass(id) {
+async function addClass(id) {  // copies a class from class_list to user_classes
     try {
         const response = await fetch('/copyRow', {
             method: 'POST',
@@ -41,7 +41,7 @@ async function addClass(id) {
     }
 }
 
-async function dropClass(id) {
+async function dropClass(id) {  // removes a class from user_classes
     try {
         const response = await fetch('/deleteRow', {
             method: 'POST',
@@ -62,6 +62,6 @@ async function dropClass(id) {
     }
 }
 
-function schedulePage() {
-    window.location.href = 'http://localhost:3000';
+function schedulePage() {  // brings user to page where they can view their schedule
+    window.location.href = 'http://localhost:8080';
 }

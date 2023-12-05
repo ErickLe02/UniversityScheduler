@@ -8,7 +8,7 @@ const connection = mysql.createConnection({
     host: 'localhost',
     user: 'root',
     password: '',
-    database: 'mysql'  // Use the default 'mysql' database for checking if 'isp_prj' exists
+    database: 'mysql'
 });
 
 // Connect to the database
@@ -20,7 +20,7 @@ connection.connect((err) => {
 
     console.log("Connected to MySQL database");
 
-    // Check if the database 'isp_prj' exists; create it if it doesn't
+    // Check if the database isp_prj exists and create it if it doesn't
     const checkDatabase = `CREATE DATABASE IF NOT EXISTS isp_prj`;
 
     connection.query(checkDatabase, (err) => {
@@ -40,7 +40,7 @@ connection.connect((err) => {
                 return;
             }
 
-            // Check if the table exists; initialize if it doesn't
+            // Check if the table exists and initialize if it doesn't
             const tableName = "class_list";
             const checkTable = `SHOW TABLES LIKE '${tableName}'`;
 
@@ -52,10 +52,9 @@ connection.connect((err) => {
                 }
 
                 if (results.length === 0) {
-                    // Read SQL file and split queries
+                    // Read sql file and split queries
                     const sqlQueries = fs.readFileSync(sqlFile, 'utf8').split(';');
 
-                    // Execute each query sequentially
                     sqlQueries.forEach((query) => {
                         if (query.trim() !== '') {
                             connection.query(query, (err) => {
@@ -69,7 +68,7 @@ connection.connect((err) => {
                     });
                     
                     
-                    // Create table for registered classes
+                    // Create table to store registered classes
                     const sqlQueries2 = fs.readFileSync(sqlFile2, 'utf8').split(';');
                     sqlQueries2.forEach((query) => {
                         if (query.trim() !== '') {
@@ -87,7 +86,7 @@ connection.connect((err) => {
                     // Close the connection after all queries have been executed
                     connection.end();
                 } else {
-                    // Table already exists, close the connection
+                    // if table already exists close the connection
                     connection.end();
                 }
             });
