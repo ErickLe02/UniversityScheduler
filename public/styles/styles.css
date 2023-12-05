@@ -15,6 +15,7 @@
     display: inline-block; /* Only take up the space it needs */
     border-radius: 4px;
     box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-left: 5px;
 }
 
   /* Highlight drop zone on drag over */
