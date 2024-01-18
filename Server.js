@@ -5,7 +5,7 @@ const app = express();
 const db = require('./dbConnection.js'); // Import your database connection
 const path = require('path');
 const mysql = require('mysql2/promise');
-
+// Meow
 app.use(express.static(path.join(__dirname, 'public')));
 
 app.get('/', (req, res) => {
