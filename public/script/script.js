@@ -1,127 +1,106 @@
-// Select the calendar element
-document.addEventListener('DOMContentLoaded', (event) => {
-    const calendar = document.querySelector('.calendar');
-    const draggableEvent = document.getElementById('draggable-event');
 
-    draggableEvent.addEventListener('dragstart', dragStart);
-    
-    // Generate the calendar slots with time slots
-    generateCalendarSlots(calendar);
+document.addEventListener('DOMContentLoaded', function() {
+    const startTime = 7; // Start time for the schedule in 24-hour format
+    const endTime = 17; // End time for the schedule in 24-hour format
+    const tableBody = document.getElementById('schedule-table').getElementsByTagName('tbody')[0];
 
-    // Highlight drop slots when dragging
-    highlightDropSlots(true);
+    for (let hour = startTime; hour <= endTime; hour++) {
+        let row = tableBody.insertRow();
+        let timeCell = row.insertCell(0);
+        timeCell.innerText = (hour <= 12 ? hour : hour - 12) + ' ' + (hour < 12 ? 'am' : 'pm');
 
-    // Remove highlight from drop slots when not dragging
-    draggableEvent.addEventListener('dragend', () => highlightDropSlots(false));
+        const days = ['Monday', 'Tuesday', 'Wednesday', 'Thursday', 'Friday']; // Add more days if needed
+        for (let day = 0; day < 5; day++) {
+            let dropZone = row.insertCell(day + 1);
+            dropZone.classList.add('drop-zone');
+            dropZone.setAttribute('data-time', timeCell.innerText);
+            dropZone.setAttribute('data-day', days[day]); // Set the day attribute
+            dropZone.addEventListener('dragover', function(event) {
+                event.preventDefault();
+                event.target.classList.add('highlight');
+            });
+
+            dropZone.addEventListener('dragleave', function(event) {
+                event.target.classList.remove('highlight');
+            });
+
+            dropZone.addEventListener('drop', function(event) {
+                event.preventDefault();
+                const dropZoneCell = event.target.closest('.drop-zone'); // Ensure we have the drop-zone cell
+                dropZoneCell.classList.remove('highlight');
+            
+                const id = event.dataTransfer.getData('text');
+                const originalDraggableElement = document.getElementById(id);
+                const compactWeekDays = originalDraggableElement.getAttribute('data-week-days');
+                const weekDays = parseDays(compactWeekDays);
+            
+                weekDays.forEach(day => {
+                    const dayCells = document.querySelectorAll(`.drop-zone[data-day="${day}"]`);
+                    dayCells.forEach(cell => {
+                        const timeSlot = cell.getAttribute('data-time');
+                        if (timeSlot === dropZoneCell.getAttribute('data-time')) {
+                            cell.innerHTML = ''; // Clear the cell
+                            const classInfo = originalDraggableElement.cloneNode(true);
+                            classInfo.classList.remove('draggable');
+                            classInfo.classList.add('class-info');
+                            cell.appendChild(classInfo);
+                        }
+                    });
+                });
+            });            
+        }
+    }
+
+    // Fetch and create draggable classes
+    fetchData();
 });
 
-function dragStart(e) {
-    e.dataTransfer.setData('text/plain', e.target.id);
-    setTimeout(() => e.target.classList.add('hide'), 0);
-}
-
-function generateCalendarSlots(calendar) {
-    const timeSlots = ['8 am', '9 am', '10 am', '11 am', '12 pm', '1 pm', '2 pm', '3 pm', '4 pm', '5 pm','6 pm','7 pm']; // example time slots
-    timeSlots.forEach((time, index) => {
-        // Create a time slot label
-        const timeLabel = document.createElement('div');
-        timeLabel.className = 'time-slot';
-        timeLabel.textContent = time;
-        calendar.appendChild(timeLabel);
-
-        for (let j = 0; j < 7; j++) { // 7 days of the week
-            const slot = document.createElement('div');
-            slot.className = 'day-slot';
-            slot.dataset.time = `${time}-${index}`; // Assign a time to each slot for identification
-            slot.addEventListener('dragover', dragOver);
-            slot.addEventListener('dragleave', dragLeave);
-            slot.addEventListener('drop', drop);
-            calendar.appendChild(slot);
-        }
-    });
-}
-
-function highlightDropSlots(highlight) {
-    const slots = document.querySelectorAll('.day-slot');
-    slots.forEach(slot => {
-        if (highlight) {
-            slot.addEventListener('dragover', () => slot.classList.add('highlight'));
-        } else {
-            slot.classList.remove('highlight');
-            slot.removeEventListener('dragover', () => slot.classList.add('highlight'));
-        }
-    });
-}
-
-function dragOver(e) {
-    e.preventDefault();
-    e.currentTarget.classList.add('highlight');
-}
-
-function dragLeave(e) {
-    e.currentTarget.classList.remove('highlight');
-}
-
-function drop(e) {
-    e.preventDefault();
-    const draggableElementId = e.dataTransfer.getData('text/plain');
-    const draggableElement = document.getElementById(draggableElementId);
-    draggableElement.classList.remove('hide');
-
-
-    this.appendChild(draggableElement);
-
-    // Remove highlight from all slots
-    highlightDropSlots(false);
-}
 
 async function fetchData() {
-    const response = await fetch('/getData');
-    const data = await response.json();
-    const container = document.getElementById('data-container');
+    try {
+        const response = await fetch('/getMyData');
+        const data = await response.json();
+        const container = document.getElementById('data-container');
 
-    data.forEach((item, index) => {
-        // Create a div element for each item
-        const element = document.createElement('div');
+        data.forEach((item, index) => {
+            const element = document.createElement('div');
+            element.className = 'draggable';
+            element.setAttribute('draggable', 'true');
+            element.setAttribute('id', 'draggable-' + index);
+            element.setAttribute('data-course-name', item['courseName']);
+            element.setAttribute('data-week-days', item['weekDays']);
+            element.textContent = `${item['courseName']}: ${item['weekDays']} ${item['startTime']} - ${item['endTime']}`;
+            container.appendChild(element);
 
-        // Format and append each property of the item
-        const p = document.createElement('p');
-        p.innerHTML = `${item['courseName']}: ${item['weekDays']} <br>
-                         ${item['startTime']} - ${item['endTime']}`;
-        element.appendChild(p);
-
-        // Set attributes for draggable functionality
-        element.setAttribute("id", "draggable-" + index);
-        element.setAttribute("draggable", "true");
-        element.style.cursor = 'move'; // Change cursor on hover
-
-        // Add the element to the container
-        container.appendChild(element);
-
-        // Add event listeners for drag events
-        element.addEventListener('dragstart', (event) => {
-            event.dataTransfer.setData('text/plain', event.target.id);
+            element.addEventListener('dragstart', function(event) {
+                event.dataTransfer.setData('text', event.target.id);
+            });
         });
-    });
-
-    // Add event listeners to the container for dragover and drop events
-    container.addEventListener('dragover', (event) => {
-        event.preventDefault(); // Necessary to allow drop
-    });
-
-    container.addEventListener('drop', (event) => {
-        event.preventDefault();
-        const id = event.dataTransfer.getData('text');
-        const draggableElement = document.getElementById(id);
-        const dropzone = event.target;
-
-        // Move the draggable element to the dropzone
-        if (dropzone.id !== draggableElement.id) {
-            dropzone.appendChild(draggableElement);
-        }
-    });
+    } catch (error) {
+        console.error('There was an error fetching the data: ', error);
+    }
 }
 
 
-
-fetchData();
+// parses the weekDays string to properly display on the schedule
+function parseDays(dayString) {
+    const dayMap = {
+      'M': 'Monday',
+      'Tu': 'Tuesday',
+      'W': 'Wednesday',
+      'Th': 'Thursday',
+      'F': 'Friday'
+    };
+  
+    let days = [];
+    let dayBuffer = "";
+  
+    for (const char of dayString) {
+      dayBuffer += char;
+      if (dayMap[dayBuffer]) {
+        days.push(dayMap[dayBuffer]);
+        dayBuffer = ""; // Reset buffer
+      }
+    }
+    return days;
+}

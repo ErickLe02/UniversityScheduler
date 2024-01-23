@@ -1,61 +1,34 @@
-body {
-    font-family: Arial, sans-serif;
-    margin: 0;
-    padding: 0;
-    background-color: #A7C7E7;
+.drop-zone {
+    height: 60px; /* Adjust as needed */
+    padding: 5px;
+    background-color: #f8f9fa;
+    border: 1px solid #6c757d;
+    transition: background-color 0.3s ease;
 }
 
-.calendar {
-    display: grid;
-    grid-template-columns: 100px repeat(7, 1fr);
-   
-    grid-auto-rows: 50px;
-}
-.header {
-    background: #f3f3f3;
-    border-bottom: 1px solid #ddd;
-    text-align: center;
-    padding: 10px;
-}
-
-.time-slot {
-    background: #f3f3f3;
-    border-right: 1px solid #ddd;
-    border-bottom: 1px solid #ddd;
-    text-align: right;
-    padding: 10px;
-    grid-column: 1;
-}
-
-.day-slot {
-    background: #f3f3f3;
-    border-bottom: 1px solid #ddd;
-}
-
-#draggable-event {
-    width: 100px;
-    padding: 10px;
-    background-color: #f0f0f0;
-    border: 1px solid #ccc;
+.draggable {
+    padding: 5px;
+    background-color: #007bff;
+    color: white;
     cursor: grab;
-}
-
-.day-slot.highlight {
-    background-color: #e3e3e3;
-}
-
-#data-container div {
-    margin: 5px;
-    padding: 10px;
-    border: 1px solid #ddd;
+    margin-bottom: 4px;
+    display: inline-block; /* Only take up the space it needs */
     border-radius: 4px;
-    background-color: #f9f9f9;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
+    margin-left: 8px;
 }
 
-#data-container div:hover {
-    background-color: #eaeaea;
+  /* Highlight drop zone on drag over */
+.highlight {
+    background-color: #9fcdff;
 }
 
-#data-container div:active {
-    background-color: #ddd;
+.class-info {
+    display: block; /* Take the full width of the cell */
+    background-color: #007bff;
+    color: white;
+    margin: 0; /* Remove margin to fit into the cell */
+    padding: 5px;
+    border-radius: 4px;
+    box-shadow: 0 2px 4px rgba(0,0,0,0.2);
 }

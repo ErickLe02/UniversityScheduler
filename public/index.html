@@ -1,29 +1,46 @@
 <!DOCTYPE html>
 <html lang="en">
 <head>
-    <meta charset="UTF-8">
-    <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Weekly Calendar</title>
-    <link rel="stylesheet" href="styles/styles.css">
+<meta charset="UTF-8">
+<meta name="viewport" content="width=device-width, initial-scale=1.0">
+<title>Weekly Schedule with Drag and Drop</title>
+<!-- Bootstrap CSS -->
+<link rel="stylesheet" href="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/css/bootstrap.min.css">
+<link rel="stylesheet" href="styles/styles.css">
 </head>
 <body>
-    
-    <div class="calendar">
-        <!-- Header -->
-        <div class="header">Time/Day</div>
-        <div class="header">Monday</div>
-        <div class="header">Tuesday</div>
-        <div class="header">Wednesday</div>
-        <div class="header">Thursday</div>
-        <div class="header">Friday</div>
-        <div class="header">Saturday</div>
-        <div class="header">Sunday</div>
+
+<div class="container mt-4">
+    <h2 class="mb-3">Drag Classes onto the Schedule</h2>
+    <div id="data-container" class="mb-3"><!-- Draggable items will be here --></div>
+
+    <h2 class="mb-3">Weekly Schedule</h2>
+    <div class="table-responsive">
+        <table class="table table-bordered" id="schedule-table">
+            <thead>
+                <tr>
+                    <th>Time</th>
+                    <th>Monday</th>
+                    <th>Tuesday</th>
+                    <th>Wednesday</th>
+                    <th>Thursday</th>
+                    <th>Friday</th>
+                </tr>
+            </thead>
+            <tbody>
+                <!-- Schedule slots will be dynamically created in JavaScript -->
+            </tbody>
+        </table>
     </div>
+</div>
+<a class="draggable" href="https://docs.google.com/presentation/d/1_ZfLCD_8ho8n44JPwiFeSTWoA9Am-fYKjRQXpcwFw6Y/edit?usp=sharing">Slides</a>
+<a class="draggable" href="https://docs.google.com/document/d/1RCnl5IN2UF7jSHkxbTihVvhjPgprgec2cYq8KVmbzFQ/edit?usp=sharing">Final report</a>
+<!-- Bootstrap JS and dependencies -->
+<script src="https://code.jquery.com/jquery-3.5.1.slim.min.js"></script>
+<script src="https://cdn.jsdelivr.net/npm/popper.js@1.9.3/dist/umd/popper.min.js"></script>
+<script src="https://stackpath.bootstrapcdn.com/bootstrap/4.5.2/js/bootstrap.min.js"></script>
 
-    <div id="draggable-event" draggable="true" style="visibility:hidden;">Draggable Event</div>
-    <div id="data-container"></div>
-
-    <script src="script/script.js"></script>
+<script src="script/script.js"></script>
 
 </body>
 </html>
